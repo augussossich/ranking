@@ -3,285 +3,410 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏆 Ranking de Pádel en la Nube</title>
+    <title>🏆 Padel Pro Ranking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f4f7f6; 
-            color: #333; 
-            margin: 0; 
-            padding: 20px; 
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #10b981; /* Esmeralda neón */
+            --primary-hover: #059669;
+            --team-blue: #3b82f6;
+            --team-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --danger: #e53e3e;
         }
-        h1 { text-align: center; color: #2c3e50; margin-bottom: 20px;}
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 20px 10px; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1 { 
+            text-align: center; 
+            font-weight: 700;
+            font-size: 28px;
+            margin-bottom: 25px;
+            background: -webkit-linear-gradient(45deg, var(--primary), #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .container { 
             max-width: 650px; 
             margin: auto; 
-            background: white; 
-            padding: 25px; 
-            border-radius: 12px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
         }
         
+        /* Pestañas */
         .nav-tabs {
             display: flex;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 5px;
             margin-bottom: 25px;
-            border-bottom: 2px solid #eee;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         .nav-tab {
             flex: 1;
             text-align: center;
-            padding: 15px;
+            padding: 12px;
             cursor: pointer;
-            font-weight: bold;
-            color: #7f8c8d;
-            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: transparent;
             border: none;
-            border-radius: 8px 8px 0 0;
-            transition: 0.3s;
-            font-size: 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 15px;
         }
-        .nav-tab:hover { background: #eef2f5; }
+        .nav-tab:hover { color: var(--text-main); }
         .nav-tab.active {
-            color: #2c3e50;
-            border-bottom: 3px solid #27ae60;
-            background: white;
+            color: #fff;
+            background: var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .tab-content { display: none; }
+
+        .tab-content { 
+            display: none; 
+            animation: fadeIn 0.4s ease-out;
+        }
         .tab-content.active { display: block; }
 
-        form { 
-            background-color: #eef2f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px; 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        h3 { margin-top: 0; margin-bottom: 15px; color: #2c3e50; text-align: center;}
+
+        @keyframes slideInRow {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Formulario y Tarjetas */
+        form { margin-bottom: 30px; }
+        h3 { font-size: 18px; margin-top: 0; margin-bottom: 20px; color: var(--text-main); font-weight: 600;}
         
         .teams-container {
             display: flex;
             gap: 15px;
             margin-bottom: 20px;
         }
-        @media (max-width: 500px) {
-            .teams-container { flex-direction: column; }
-        }
+        @media (max-width: 500px) { .teams-container { flex-direction: column; } }
+        
         .team-box {
-            background-color: white;
-            padding: 15px;
-            border-radius: 8px;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
             flex: 1;
-            border: 1px solid #dcdde1;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
         }
+        
         .team-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #34495e;
+            font-weight: 700;
+            margin-bottom: 15px;
             font-size: 14px;
             text-align: center;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
+        .title-blue { color: var(--team-blue); }
+        .title-red { color: var(--team-red); }
+
         select { 
-            padding: 10px; 
-            font-size: 15px; 
-            border-radius: 6px; 
-            border: 1px solid #ccc; 
+            padding: 12px; 
+            font-size: 14px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border-color); 
+            background-color: #0f172a;
+            color: var(--text-main);
             width: 100%;
             box-sizing: border-box;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
         }
+        select:focus { border-color: var(--primary); }
         
+        /* Marcador */
         .scoreboard {
-            background: white;
-            border: 1px solid #dcdde1;
-            border-radius: 8px;
-            padding: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
         .score-row {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .score-row:last-child { margin-bottom: 0; }
         .score-row span {
-            font-weight: bold;
+            font-weight: 600;
             width: 50px;
             text-align: center;
-            color: #7f8c8d;
+            color: var(--text-muted);
+            font-size: 13px;
+            text-transform: uppercase;
         }
         .score-input {
-            width: 60px;
-            padding: 8px;
+            width: 65px;
+            padding: 10px;
             text-align: center;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 700;
+            border: 1px solid var(--border-color);
+            background-color: #0f172a;
+            color: white;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s;
         }
+        .score-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
 
+        /* Botones */
         .btn-submit { 
-            background-color: #27ae60; 
+            background: linear-gradient(135deg, var(--primary), #047857);
             color: white; 
             border: none; 
             cursor: pointer; 
-            font-weight: bold; 
-            transition: background-color 0.3s;
+            font-weight: 700; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
             width: 100%;
-            padding: 15px;
-            border-radius: 6px;
+            padding: 16px;
+            border-radius: 12px;
             font-size: 16px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s ease;
         }
-        .btn-submit:hover { background-color: #219653; }
-        .btn-submit:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
+        .btn-submit:active { transform: translateY(0); }
+        .btn-submit:disabled { background: var(--border-color); color: var(--text-muted); box-shadow: none; cursor: not-allowed; transform: none;}
         
+        /* Tablas */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
         table { 
             width: 100%; 
             border-collapse: collapse; 
-            margin-top: 10px; 
             font-size: 14px;
         }
         th, td { 
             text-align: center; 
-            padding: 12px 10px; 
-            border-bottom: 1px solid #eee; 
+            padding: 15px 10px; 
+            border-bottom: 1px solid var(--border-color); 
         }
         th { 
-            background-color: #2c3e50; 
-            color: white; 
+            background-color: rgba(0,0,0,0.2); 
+            color: var(--text-muted); 
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
         }
-        td.name-col { text-align: left; }
+        tr:last-child td { border-bottom: none; }
+        td.name-col { text-align: left; font-weight: 600; }
         
+        /* Animación para filas de la tabla */
+        tbody tr {
+            opacity: 0;
+            animation: slideInRow 0.4s ease-out forwards;
+        }
+
         .btn-delete {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            background-color: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
         }
-        .btn-delete:hover { background-color: #c0392b; }
-        .score-history { font-weight: bold; color: #2c3e50; font-size: 15px; }
-        .team-names { font-size: 0.95em; line-height: 1.5; }
+        .btn-delete:hover { background-color: var(--danger); color: white; }
+        
+        .score-history { font-weight: 700; color: #fff; font-size: 14px; letter-spacing: 1px;}
+        .team-names { font-size: 13px; line-height: 1.6; }
 
         .note { 
-            font-size: 0.85em; 
-            color: #7f8c8d; 
+            font-size: 12px; 
+            color: var(--text-muted); 
             text-align: center; 
-            margin-top: 25px; 
+            margin-top: 20px; 
             line-height: 1.5;
         }
 
+        /* Cargando animado */
         #loading {
             text-align: center;
-            color: #e67e22;
-            font-weight: bold;
+            color: var(--primary);
+            font-weight: 600;
             margin-bottom: 15px;
+            font-size: 14px;
+            animation: pulse 1.5s infinite;
         }
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        /* Toast Notifications */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--card-bg);
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: 600;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s ease-out;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+        #toast.error { border-left-color: var(--danger); }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>☁️ Ranking de Pádel</h1>
+        <h1>🏆 Pro Padel Tour</h1>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab('tab-ranking')">🏆 Ranking y Carga</button>
-            <button class="nav-tab" onclick="switchTab('tab-history')">📜 Historial</button>
+            <button class="nav-tab active" onclick="switchTab('tab-ranking')">Torneo y Carga</button>
+            <button class="nav-tab" onclick="switchTab('tab-history')">Historial de Partidos</button>
         </div>
 
-        <div id="loading">Sincronizando con la nube... ⏳</div>
+        <div id="loading">Sincronizando con la nube...</div>
 
         <div id="tab-ranking" class="tab-content active">
             <form id="matchForm">
-                <h3>Cargar Resultado</h3>
                 
                 <div class="teams-container">
                     <div class="team-box">
-                        <div class="team-title" style="color: #2980b9;">Pareja 1 (Azul)</div>
+                        <div class="team-title title-blue">Pareja Azul</div>
                         <select id="p1_a" required></select>
                         <select id="p1_b" required></select>
                     </div>
 
                     <div class="team-box">
-                        <div class="team-title" style="color: #c0392b;">Pareja 2 (Roja)</div>
+                        <div class="team-title title-red">Pareja Roja</div>
                         <select id="p2_a" required></select>
                         <select id="p2_b" required></select>
                     </div>
                 </div>
 
                 <div class="scoreboard">
-                    <div class="team-title">Resultado por Sets (Completá los que usen)</div>
+                    <div class="team-title" style="color: var(--text-muted); margin-bottom: 20px;">Resultado por Sets</div>
                     <div class="score-row">
-                        <input type="number" id="s1_t1" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s1_t1" class="score-input" placeholder="-" min="0">
                         <span>Set 1</span>
-                        <input type="number" id="s1_t2" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s1_t2" class="score-input" placeholder="-" min="0">
                     </div>
                     <div class="score-row">
-                        <input type="number" id="s2_t1" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s2_t1" class="score-input" placeholder="-" min="0">
                         <span>Set 2</span>
-                        <input type="number" id="s2_t2" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s2_t2" class="score-input" placeholder="-" min="0">
                     </div>
                     <div class="score-row">
-                        <input type="number" id="s3_t1" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s3_t1" class="score-input" placeholder="-" min="0">
                         <span>Set 3</span>
-                        <input type="number" id="s3_t2" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s3_t2" class="score-input" placeholder="-" min="0">
                     </div>
                     <div class="score-row">
-                        <input type="number" id="s4_t1" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s4_t1" class="score-input" placeholder="-" min="0">
                         <span>Set 4</span>
-                        <input type="number" id="s4_t2" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s4_t2" class="score-input" placeholder="-" min="0">
                     </div>
                     <div class="score-row">
-                        <input type="number" id="s5_t1" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s5_t1" class="score-input" placeholder="-" min="0">
                         <span>Set 5</span>
-                        <input type="number" id="s5_t2" class="score-input" placeholder="0" min="0">
+                        <input type="number" id="s5_t2" class="score-input" placeholder="-" min="0">
                     </div>
                 </div>
 
-                <button type="submit" id="submitBtn" class="btn-submit" disabled>Guardar Partido en la Nube</button>
+                <button type="submit" id="submitBtn" class="btn-submit" disabled>Guardar Partido</button>
             </form>
 
-            <h3>Tabla de Posiciones Individual</h3>
-            <table id="rankingTable">
-                <thead>
-                    <tr>
-                        <th>Pos</th>
-                        <th class="name-col">Jugador</th>
-                        <th>PJ</th>
-                        <th>Victorias</th>
-                        <th>Games</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <h3 style="text-align: center; margin-top: 40px;">Top Ranking Individual</h3>
+            <div class="table-container">
+                <table id="rankingTable">
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th class="name-col">Jugador</th>
+                            <th>PJ</th>
+                            <th>Vict</th>
+                            <th>Games</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
             
-            <p class="note">Todos los datos se sincronizan en vivo. Solo llená los sets que hayan jugado, dejá en blanco el resto. 📱☁️</p>
+            <p class="note">Actualización en tiempo real. Completá únicamente los sets jugados.</p>
         </div>
 
         <div id="tab-history" class="tab-content">
-            <h3>Historial de Partidos</h3>
-            <table id="historyTable">
-                <thead>
-                    <tr>
-                        <th>Parejas</th>
-                        <th>Resultado (Sets)</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <h3 style="text-align: center;">Últimos Partidos</h3>
+            <div class="table-container">
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Parejas</th>
+                            <th>Resultado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
         
     </div>
+
+    <div id="toast">Notificación</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // TUS CREDENCIALES EXACTAS
         const firebaseConfig = {
             apiKey: "AIzaSyAON6f0_peD5F5IzrACd0eY1r3_BiNngjk",
             authDomain: "ranking-b8229.firebaseapp.com",
@@ -295,11 +420,22 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // UI Functions
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
+        }
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            if(isError) toast.classList.add("error");
+            else toast.classList.remove("error");
+            
+            toast.classList.add("show");
+            setTimeout(() => { toast.classList.remove("show"); }, 3000);
         }
 
         const players = ['Augusto', 'Alejo', 'Lautaro', 'Lucca', 'Mateo', 'Tomás'];
@@ -359,13 +495,15 @@
             const tbodyRanking = document.querySelector('#rankingTable tbody');
             tbodyRanking.innerHTML = '';
             ranking.forEach((player, index) => {
-                let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+                let medal = index === 0 ? '🏆' : index === 1 ? '🥈' : index === 2 ? '🥉' : `<span style="color:var(--text-muted)">${index + 1}</span>`;
+                // Añadimos delay escalonado para la animación de entrada
+                let delay = index * 0.08; 
                 tbodyRanking.innerHTML += `
-                    <tr>
-                        <td>${index + 1} ${medal}</td>
-                        <td class="name-col"><strong>${player.name}</strong></td>
+                    <tr style="animation-delay: ${delay}s">
+                        <td style="font-size:16px">${medal}</td>
+                        <td class="name-col">${player.name}</td>
                         <td>${player.matchesPlayed}</td>
-                        <td>${player.matchesWon}</td>
+                        <td style="color:var(--primary); font-weight:700;">${player.matchesWon}</td>
                         <td>${player.gamesWon}</td>
                     </tr>
                 `;
@@ -374,18 +512,19 @@
             const tbodyHistory = document.querySelector('#historyTable tbody');
             tbodyHistory.innerHTML = '';
             if (matches.length === 0) {
-                tbodyHistory.innerHTML = '<tr><td colspan="3" style="color:#7f8c8d; padding: 30px;">Aún no hay partidos.</td></tr>';
+                tbodyHistory.innerHTML = '<tr><td colspan="3" style="color:var(--text-muted); padding: 30px;">Aún no hay partidos disputados.</td></tr>';
                 return;
             }
 
-            matches.forEach((m) => {
-                let setsString = m.sets.map(s => `${s.t1}-${s.t2}`).join(' | ');
+            matches.forEach((m, index) => {
+                let setsString = m.sets.map(s => `${s.t1}-${s.t2}`).join(' <span style="color:var(--border-color)">|</span> ');
+                let delay = index * 0.05;
                 tbodyHistory.innerHTML += `
-                    <tr>
+                    <tr style="animation-delay: ${delay}s">
                         <td class="team-names">
-                            <strong style="color: #2980b9;">${m.team1[0]} & ${m.team1[1]}</strong><br>
-                            <span style="color:#7f8c8d; font-size: 0.8em;">vs</span><br>
-                            <strong style="color: #c0392b;">${m.team2[0]} & ${m.team2[1]}</strong>
+                            <strong style="color: var(--team-blue);">${m.team1[0]} & ${m.team1[1]}</strong><br>
+                            <span style="color:var(--text-muted); font-size: 11px;">vs</span><br>
+                            <strong style="color: var(--team-red);">${m.team2[0]} & ${m.team2[1]}</strong>
                         </td>
                         <td class="score-history">${setsString}</td>
                         <td><button class="btn-delete" onclick="borrarPartido('${m.id}')">Borrar</button></td>
@@ -395,8 +534,9 @@
         }
 
         window.borrarPartido = async function(id) {
-            if (confirm('¿Estás seguro de borrar este partido de la nube?')) {
+            if (confirm('¿Eliminar definitivamente este partido?')) {
                 await deleteDoc(doc(db, "partidos", id));
+                showToast("Partido eliminado");
             }
         }
 
@@ -404,38 +544,43 @@
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Guardando...";
+            btn.innerText = "Procesando...";
 
             const p1a = selects.p1a.value, p1b = selects.p1b.value;
             const p2a = selects.p2a.value, p2b = selects.p2b.value;
 
             const uniquePlayers = new Set([p1a, p1b, p2a, p2b]);
             if (uniquePlayers.size !== 4) {
-                alert('¡Jugador repetido! Elegí 4 distintos.');
-                btn.disabled = false; btn.innerText = "Guardar Partido en la Nube";
+                showToast("Error: Hay un jugador repetido en la cancha.", true);
+                btn.disabled = false; btn.innerText = "Guardar Partido";
                 return;
             }
 
-            const s1_t1 = parseInt(document.getElementById('s1_t1').value) || 0;
-            const s1_t2 = parseInt(document.getElementById('s1_t2').value) || 0;
-            const s2_t1 = parseInt(document.getElementById('s2_t1').value) || 0;
-            const s2_t2 = parseInt(document.getElementById('s2_t2').value) || 0;
-            const s3_t1 = parseInt(document.getElementById('s3_t1').value) || 0;
-            const s3_t2 = parseInt(document.getElementById('s3_t2').value) || 0;
-            const s4_t1 = parseInt(document.getElementById('s4_t1').value) || 0;
-            const s4_t2 = parseInt(document.getElementById('s4_t2').value) || 0;
-            const s5_t1 = parseInt(document.getElementById('s5_t1').value) || 0;
-            const s5_t2 = parseInt(document.getElementById('s5_t2').value) || 0;
+            const getScore = id => parseInt(document.getElementById(id).value) || 0;
+            const hasScore = id => document.getElementById(id).value !== "";
+
+            const setsData = [
+                {t1: getScore('s1_t1'), t2: getScore('s1_t2'), played: hasScore('s1_t1') || hasScore('s1_t2')},
+                {t1: getScore('s2_t1'), t2: getScore('s2_t2'), played: hasScore('s2_t1') || hasScore('s2_t2')},
+                {t1: getScore('s3_t1'), t2: getScore('s3_t2'), played: hasScore('s3_t1') || hasScore('s3_t2')},
+                {t1: getScore('s4_t1'), t2: getScore('s4_t2'), played: hasScore('s4_t1') || hasScore('s4_t2')},
+                {t1: getScore('s5_t1'), t2: getScore('s5_t2'), played: hasScore('s5_t1') || hasScore('s5_t2')}
+            ];
 
             let sets1 = 0, sets2 = 0;
-            if (s1_t1 > s1_t2) sets1++; else if (s1_t2 > s1_t1) sets2++;
-            if (s2_t1 > s2_t2) sets1++; else if (s2_t2 > s2_t1) sets2++;
-            if (s3_t1 > s3_t2) sets1++; else if (s3_t2 > s3_t1) sets2++;
-            if (s4_t1 > s4_t2) sets1++; else if (s4_t2 > s4_t1) sets2++;
-            if (s5_t1 > s5_t2) sets1++; else if (s5_t2 > s5_t1) sets2++;
+            let totalGames1 = 0, totalGames2 = 0;
+            let playedSets = [];
 
-            const totalGames1 = s1_t1 + s2_t1 + s3_t1 + s4_t1 + s5_t1;
-            const totalGames2 = s1_t2 + s2_t2 + s3_t2 + s4_t2 + s5_t2;
+            setsData.forEach(s => {
+                if(s.played) {
+                    if (s.t1 > s.t2) sets1++; else if (s.t2 > s.t1) sets2++;
+                    totalGames1 += s.t1;
+                    totalGames2 += s.t2;
+                    playedSets.push({t1: s.t1, t2: s.t2});
+                }
+            });
+
+            if(playedSets.length === 0) playedSets.push({t1: 0, t2: 0});
 
             let matchWinner = 0;
             if (sets1 > sets2) matchWinner = 1;
@@ -444,14 +589,6 @@
                 if (totalGames1 > totalGames2) matchWinner = 1;
                 else if (totalGames2 > totalGames1) matchWinner = 2;
             }
-
-            let playedSets = [];
-            if (s1_t1 > 0 || s1_t2 > 0) playedSets.push({t1: s1_t1, t2: s1_t2});
-            if (s2_t1 > 0 || s2_t2 > 0) playedSets.push({t1: s2_t1, t2: s2_t2});
-            if (s3_t1 > 0 || s3_t2 > 0) playedSets.push({t1: s3_t1, t2: s3_t2});
-            if (s4_t1 > 0 || s4_t2 > 0) playedSets.push({t1: s4_t1, t2: s4_t2});
-            if (s5_t1 > 0 || s5_t2 > 0) playedSets.push({t1: s5_t1, t2: s5_t2});
-            if(playedSets.length === 0) playedSets.push({t1: 0, t2: 0});
 
             try {
                 await addDoc(collection(db, "partidos"), {
@@ -463,15 +600,21 @@
                     winner: matchWinner,
                     timestamp: serverTimestamp()
                 });
+                
                 document.querySelectorAll('.score-input').forEach(input => input.value = '');
+                showToast("¡Partido guardado con éxito! 🎾");
+                
+                // Mover scroll arriba sutilmente para ver el ranking
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
             } catch (error) {
                 console.error("Error sumando partido: ", error);
-                alert("Hubo un error al guardar. Fijate la consola.");
+                showToast("Error de conexión. Intentá de nuevo.", true);
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Guardar Partido en la Nube";
+                btn.innerText = "Guardar Partido";
             }
         });
     </script>
 </body>
-</html>
+</html>     
